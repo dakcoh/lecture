@@ -2,6 +2,7 @@ package com.lecture.backoffice.application.service;
 
 import com.lecture.backoffice.infrastructure.repository.ReservationRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @Service
 public class AttendeeQueryService {
 
+    @Qualifier("backofficeReservationRepository")
     private final ReservationRepository reservationRepository;
 
     public AttendeeQueryService(ReservationRepository reservationRepository) {
