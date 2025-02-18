@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Lecture 엔티티의 CRUD 작업을 위한 Repository
  */
-@Repository
+@Repository("backofficeLectureRepository")
 public class LectureRepository {
 
     @PersistenceContext
@@ -28,6 +28,6 @@ public class LectureRepository {
 
     // 모든 강연 조회
     public List<Lecture> findAll() {
-        return em.createQuery("select l from Lecture l", Lecture.class).getResultList();
+        return em.createQuery("select l from backofficeLecture l", Lecture.class).getResultList();
     }
 }

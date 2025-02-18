@@ -1,6 +1,9 @@
 package com.lecture.backoffice.api.controller;
 
 import com.lecture.backoffice.application.service.AttendeeQueryService;
+import com.lecture.common.config.CommonResponse;
+import com.lecture.common.config.ResponseUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +24,8 @@ public class AttendeeController {
 
     // 강연의 신청자 사번 목록 조회 API
     @GetMapping("/{lectureId}/attendees")
-    public ResponseEntity<List<String>> getAttendeeList(@PathVariable Long lectureId) {
+    public ResponseEntity<CommonResponse<List<String>>> getAttendeeList(@PathVariable Long lectureId) {
         List<String> attendees = attendeeQueryService.getAttendeesByLectureId(lectureId);
-        return ResponseEntity.ok(attendees);
+        return ResponseUtil.successResponse(HttpStatus.OK, "강연 신청자 사번 목록 조회 성공", attendees);
     }
 }
