@@ -1,8 +1,8 @@
 package com.lecture.front.application.validate;
 
 import com.lecture.front.api.dto.ReservationRequest;
-import com.lecture.front.domain.model.Lecture;
-import com.lecture.front.domain.model.Reservation;
+import com.lecture.common.domain.model.Lecture;
+import com.lecture.common.domain.model.Reservation;
 import com.lecture.front.domain.repository.LectureRepository;
 import com.lecture.front.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +44,10 @@ public class ReservationValidator {
             throw new IllegalArgumentException("존재하지 않는 강연입니다.");
         }
 
-        // 2. 동일 강연 중복 예약 검증
-        if (reservationRepository.existsByLectureIdAndEmployeeNumber(dto.getLectureId(), dto.getEmployeeNumber())) {
-            log.error("예약 실패: 중복 예약. lectureId={}, employeeNumber={}",
-                    dto.getLectureId(), dto.getEmployeeNumber());
-            throw new IllegalArgumentException("이미 신청한 강연입니다.");
+        // 2. 활성 예약 중복 확인
+        if (reservationRepository.existsActiveReservationByLectureIdAndEmployeeNumber(dto.getLectureId(), dto.getEmployeeNumber())) {
+            log.error("예약 실패: 이미 활성 예약이 존재합니다. lectureId={}, employeeNumber={}", dto.getLectureId(), dto.getEmployeeNumber());
+            throw new IllegalArgumentException("이미 신청한 강연이 있습니다.");
         }
 
         // 3. 강연 정원 초과 검증

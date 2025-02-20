@@ -1,7 +1,7 @@
 package com.lecture.front.application.service;
 
 import com.lecture.front.api.dto.LectureResponse;
-import com.lecture.front.domain.model.Lecture;
+import com.lecture.common.domain.model.Lecture;
 import com.lecture.front.domain.repository.LectureRepository;
 import com.lecture.front.domain.repository.ReservationRepository;
 import jakarta.transaction.Transactional;

@@ -1,6 +1,6 @@
 package com.lecture.backoffice.api.dto;
 
-import com.lecture.backoffice.domain.model.Lecture;
+import com.lecture.common.domain.model.Lecture;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 @Getter
 public class LectureResponse {
 
-    private Long id;
-    private String lecturer;
-    private String venue;
-    private int capacity;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String description;
+    private final Long id;
+    private final String lecturer;
+    private final String venue;
+    private final int capacity;
+    private final LocalDateTime startTime;
+    private final LocalDateTime endTime;
+    private final String description;
 
     public LectureResponse(Lecture lecture) {
         this.id = lecture.getId();

@@ -1,6 +1,5 @@
-package com.lecture.backoffice.domain.model;
+package com.lecture.common.domain.model;
 
-import com.lecture.common.domain.model.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -8,7 +7,7 @@ import lombok.*;
 /**
  * 강연 예약 엔티티: 특정 강연에 대해 신청한 사번 및 예약 상태 저장
  */
-@Entity(name = "backofficeReservation")
+@Entity
 @Table(name = "reservations", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"lecture_id", "employeeNumber"})
 })
