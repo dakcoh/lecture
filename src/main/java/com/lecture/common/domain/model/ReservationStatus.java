@@ -1,4 +1,4 @@
-package com.lecture.backoffice.domain.model;
+package com.lecture.common.domain.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

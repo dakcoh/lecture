@@ -1,6 +1,6 @@
-package com.lecture.backoffice.infrastructure.repository;
+package com.lecture.backoffice.domain.repository;
 
-import com.lecture.backoffice.domain.model.Lecture;
+import com.lecture.common.domain.model.Lecture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -28,6 +28,6 @@ public class LectureRepository {
 
     // 모든 강연 조회
     public List<Lecture> findAll() {
-        return em.createQuery("select l from backofficeLecture l", Lecture.class).getResultList();
+        return em.createQuery("select l from Lecture l", Lecture.class).getResultList();
     }
 }

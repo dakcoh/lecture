@@ -1,6 +1,5 @@
-package com.lecture.backoffice.domain.model;
+package com.lecture.common.domain.model;
 
-import com.lecture.common.domain.model.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * 강연 엔티티: 강연자, 강연장, 신청 인원, 강연 시간, 강연 내용
  */
-@Entity(name = "backofficeLecture")
+@Entity
 @Table(name = "lectures")
 @Getter
 @Setter

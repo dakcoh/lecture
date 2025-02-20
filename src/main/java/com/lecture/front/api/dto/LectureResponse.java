@@ -1,6 +1,6 @@
 package com.lecture.front.api.dto;
 
-import com.lecture.front.domain.model.Lecture;
+import com.lecture.common.domain.model.Lecture;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

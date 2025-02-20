@@ -1,7 +1,7 @@
 package com.lecture.front.api.dto;
 
-import com.lecture.front.domain.model.Reservation;
-import com.lecture.front.domain.model.ReservationStatus;
+import com.lecture.common.domain.model.Reservation;
+import com.lecture.common.domain.model.ReservationStatus;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

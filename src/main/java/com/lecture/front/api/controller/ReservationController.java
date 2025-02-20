@@ -40,9 +40,10 @@ public class ReservationController {
     }
 
     // 신청한 강연 취소
-    @DeleteMapping("/{reservationId}")
-    public ResponseEntity<Void> cancelReservation(@PathVariable Long reservationId) {
-        facadeService.cancelReservation(reservationId);
+    @DeleteMapping("/reservations/{reservationId}/employee/{employeeNumber}")
+    public ResponseEntity<Void> cancelReservation(@PathVariable Long reservationId, @PathVariable String employeeNumber) {
+        facadeService.cancelReservation(reservationId, employeeNumber);
         return ResponseEntity.noContent().build();
     }
+
 }

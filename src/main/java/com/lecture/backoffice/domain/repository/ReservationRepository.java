@@ -1,4 +1,4 @@
-package com.lecture.backoffice.infrastructure.repository;
+package com.lecture.backoffice.domain.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -17,7 +17,7 @@ public class ReservationRepository {
 
     // 강연 ID에 해당하는 예약의 사번 목록 조회
     public List<String> findEmployeeNumbersByLectureId(Long lectureId) {
-        return em.createQuery("select r.employeeNumber from backofficeReservation r where r.lectureId = :lectureId", String.class)
+        return em.createQuery("select r.employeeNumber from Reservation r where r.lectureId = :lectureId", String.class)
                 .setParameter("lectureId", lectureId)
                 .getResultList();
     }

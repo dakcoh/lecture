@@ -60,8 +60,8 @@ public class FrontFacadeService {
      *
      * @param reservationId 예약 ID
      */
-    public void cancelReservation(Long reservationId) {
-        reservationService.cancelReservation(reservationId);
+    public void cancelReservation(Long reservationId, String employeeNumber) {
+        reservationService.cancelReservation(reservationId, employeeNumber);
     }
 
     /**
