@@ -23,8 +23,9 @@ public class Reservation extends BaseEntity {
     private Long id;
 
     // 예약이 속한 강연의 ID
-    @Column(name = "lecture_id")
-    private Long lectureId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecture_id", nullable = false)
+    private Lecture lecture;
 
     // 신청한 사번 (5자리)
     @Size(min=5, max=5)

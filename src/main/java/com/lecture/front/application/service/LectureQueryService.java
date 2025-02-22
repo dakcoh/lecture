@@ -2,7 +2,7 @@ package com.lecture.front.application.service;
 
 import com.lecture.front.api.dto.LectureResponse;
 import com.lecture.front.domain.repository.LectureRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

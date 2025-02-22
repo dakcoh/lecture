@@ -14,20 +14,20 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 public abstract class BaseEntity {
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP(0)")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP(0)")
     private LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().withNano(0);
+        this.updatedAt = LocalDateTime.now().withNano(0);
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now().withNano(0);
     }
 }

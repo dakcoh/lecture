@@ -14,7 +14,8 @@ public class LectureResponse {
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
     private final String description;
-    // 상태 필드 등 추가
+    // 추가적으로 예약 건수를 포함할 수 있음
+    private Long reservationCount;
 
     // Lecture 타입을 인자로 받는 생성자
     public LectureResponse(Lecture lecture) {
@@ -25,6 +26,10 @@ public class LectureResponse {
         this.startTime = lecture.getStartTime();
         this.endTime = lecture.getEndTime();
         this.description = lecture.getDescription();
-        // 필요시 추가 필드 초기화
+    }
+    // 예약 건수를 포함한 생성자
+    public LectureResponse(Lecture lecture, Long reservationCount) {
+        this(lecture);
+        this.reservationCount = reservationCount;
     }
 }
