@@ -17,7 +17,7 @@ public class ReservationRepository {
 
     // 강연 ID에 해당하는 예약의 사번 목록 조회
     public List<String> findEmployeeNumbersByLectureId(Long lectureId) {
-        return em.createQuery("select r.employeeNumber from Reservation r where r.lectureId = :lectureId", String.class)
+        return em.createQuery("select r.employeeNumber from Reservation r where r.lecture.id = :lectureId", String.class)
                 .setParameter("lectureId", lectureId)
                 .getResultList();
     }

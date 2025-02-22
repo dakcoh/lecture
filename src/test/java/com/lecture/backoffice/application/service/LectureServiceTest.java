@@ -2,7 +2,7 @@ package com.lecture.backoffice.application.service;
 
 import com.lecture.backoffice.api.dto.LectureRequest;
 import com.lecture.backoffice.api.dto.LectureResponse;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

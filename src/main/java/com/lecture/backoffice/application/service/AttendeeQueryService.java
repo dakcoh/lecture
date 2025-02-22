@@ -1,7 +1,7 @@
 package com.lecture.backoffice.application.service;
 
 import com.lecture.backoffice.domain.repository.ReservationRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

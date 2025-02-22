@@ -2,7 +2,6 @@ package com.lecture.front.application.validate;
 
 import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.common.domain.model.Lecture;
-import com.lecture.common.domain.model.Reservation;
 import com.lecture.front.domain.repository.LectureRepository;
 import com.lecture.front.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,7 @@ public class ReservationValidator {
         // 2. 활성 예약 중복 확인
         if (reservationRepository.existsActiveReservationByLectureIdAndEmployeeNumber(dto.getLectureId(), dto.getEmployeeNumber())) {
             log.error("예약 실패: 이미 활성 예약이 존재합니다. lectureId={}, employeeNumber={}", dto.getLectureId(), dto.getEmployeeNumber());
-            throw new IllegalArgumentException("이미 신청한 강연이 있습니다.");
+            throw new IllegalArgumentException("이미 신청한 강연입니다.");
         }
 
         // 3. 강연 정원 초과 검증
@@ -57,26 +56,6 @@ public class ReservationValidator {
                     dto.getLectureId(), currentReservations, lecture.getCapacity());
             throw new IllegalArgumentException("강연 정원이 초과되었습니다.");
         }
-
-        // 4. 동일 시간대 중복 예약 검증
-        List<Reservation> existingReservations = reservationRepository.findByEmployeeNumber(dto.getEmployeeNumber());
-        for (Reservation existing : existingReservations) {
-            Lecture reservedLecture = lectureRepository.findById(existing.getLectureId());
-            if (reservedLecture != null && isOverlapping(reservedLecture, lecture)) {
-                log.error("예약 실패: 같은 시간대에 이미 예약된 강연 존재. employeeNumber={}, 기존강연ID={}, 새강연ID={}",
-                        dto.getEmployeeNumber(), reservedLecture.getId(), lecture.getId());
-                throw new IllegalArgumentException("이미 같은 시간에 예약된 강연이 있습니다.");
-            }
-        }
-
         return lecture;
-    }
-
-    /**
-     * 두 강연의 시간대가 겹치는지 확인하는 헬퍼 메서드
-     */
-    private boolean isOverlapping(Lecture lecture1, Lecture lecture2) {
-        return lecture1.getStartTime().isBefore(lecture2.getEndTime()) &&
-                lecture2.getStartTime().isBefore(lecture1.getEndTime());
     }
 }

@@ -19,7 +19,7 @@ public class ReservationResponse {
 
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
-        this.lectureId = reservation.getLectureId();
+        this.lectureId = reservation.getLecture().getId();
         this.employeeNumber = reservation.getEmployeeNumber();
         this.status = reservation.getStatus();
         this.createdAt = reservation.getCreatedAt();

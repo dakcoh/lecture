@@ -32,8 +32,8 @@ public class LectureController {
 
     // 실시간 인기 강연 조회
     @GetMapping("/popular")
-    public ResponseEntity<List<LectureResponse>> getPopularLectures() {
+    public ResponseEntity<CommonResponse<List<LectureResponse>>> getPopularLectures() {
         List<LectureResponse> popularLectures = facadeService.getPopularLectures();
-        return ResponseEntity.ok(popularLectures);
+        return ResponseUtil.successResponse(HttpStatus.OK, "실시간 인기 강연 조회 성공", popularLectures);
     }
 }

@@ -30,13 +30,31 @@ public class ReservationRepository {
     }
 
     /**
+     * 강연 ID와 사번을 기준으로 취소된(CANCELED) 예약을 조회합니다.
+     * @param lectureId 강연 ID
+     * @param employeeNumber 사번
+     * @return 조건에 맞는 취소된 Reservation 엔티티, 없으면 null
+     */
+    public Reservation findCanceledReservationByLectureIdAndEmployeeNumber(Long lectureId, String employeeNumber) {
+        List<Reservation> results = em.createQuery(
+                        "select r from Reservation r where r.lecture.id = :lectureId and r.employeeNumber = :employeeNumber and r.status = :status",
+                        Reservation.class)
+                .setParameter("lectureId", lectureId)
+                .setParameter("employeeNumber", employeeNumber)
+                .setParameter("status", ReservationStatus.CANCELED)
+                .getResultList();
+        return results.isEmpty() ? null : results.getFirst();
+    }
+
+    /**
      * 사번으로 예약 목록 조회
      * @param employeeNumber 예약된 사번
      * @return 해당 사번에 해당하는 Reservation 리스트
      */
-    public List<Reservation> findByEmployeeNumber(String employeeNumber) {
-        return em.createQuery("select r from Reservation r where r.employeeNumber = :employeeNumber", Reservation.class)
+    public List<Reservation> findActiveReservationsByEmployeeNumber(String employeeNumber) {
+        return em.createQuery("select r from Reservation r where r.employeeNumber = :employeeNumber and r.status = :status", Reservation.class)
                 .setParameter("employeeNumber", employeeNumber)
+                .setParameter("status", ReservationStatus.CONFIRMED)
                 .getResultList();
     }
 
@@ -46,8 +64,9 @@ public class ReservationRepository {
      * @return 예약 건수
      */
     public long countByLectureId(Long lectureId) {
-        return em.createQuery("select count(r) from Reservation r where r.lectureId = :lectureId", Long.class)
+        return em.createQuery("select count(r) from Reservation r where r.lecture.id = :lectureId and r.status = :status", Long.class)
                 .setParameter("lectureId", lectureId)
+                .setParameter("status", ReservationStatus.CONFIRMED)
                 .getSingleResult();
     }
 
@@ -57,28 +76,13 @@ public class ReservationRepository {
      * @param employeeNumber 사번
      * @return 조건에 맞는 Reservation 엔티티, 없으면 null 반환
      */
-    public Reservation findByLectureIdAndEmployeeNumber(Long lectureId, String employeeNumber) {
-        List<Reservation> results = em.createQuery("select r from Reservation r where r.lectureId = :lectureId and r.employeeNumber = :employeeNumber", Reservation.class)
+    public Reservation findActiveReservationByLectureIdAndEmployeeNumber(Long lectureId, String employeeNumber) {
+        List<Reservation> results = em.createQuery("select r from Reservation r where r.lecture.id = :lectureId and r.employeeNumber = :employeeNumber and r.status = :status", Reservation.class)
                 .setParameter("lectureId", lectureId)
                 .setParameter("employeeNumber", employeeNumber)
+                .setParameter("status", ReservationStatus.CONFIRMED)
                 .getResultList();
         return results.isEmpty() ? null : results.getFirst();
-    }
-
-    /**
-     * 특정 기간 내에 해당 강연에 대한 예약 건수를 조회
-     * 주로 인기 강연 조회 시 사용됩니다.
-     * @param lectureId 강연 ID
-     * @param from 시작 시간
-     * @param to 종료 시간
-     * @return 해당 기간 내 예약 건수
-     */
-    public long countReservationsForLectureWithinPeriod(Long lectureId, LocalDateTime from, LocalDateTime to) {
-        return em.createQuery("select count(r) from Reservation r where r.lectureId = :lectureId and r.createdAt between :from and :to", Long.class)
-                .setParameter("lectureId", lectureId)
-                .setParameter("from", from)
-                .setParameter("to", to)
-                .getSingleResult();
     }
 
     /**
@@ -88,7 +92,7 @@ public class ReservationRepository {
      * @return 활성 예약이 존재하면 true, 없으면 false
      */
     public boolean existsActiveReservationByLectureIdAndEmployeeNumber(Long lectureId, String employeeNumber) {
-        Long count = em.createQuery("select count(r) from Reservation r where r.lectureId = :lectureId and r.employeeNumber = :employeeNumber and r.status = :status", Long.class)
+        Long count = em.createQuery("select count(r) from Reservation r where r.lecture.id = :lectureId and r.employeeNumber = :employeeNumber and r.status = :status", Long.class)
                 .setParameter("lectureId", lectureId)
                 .setParameter("employeeNumber", employeeNumber)
                 .setParameter("status", ReservationStatus.CONFIRMED)

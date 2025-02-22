@@ -34,16 +34,16 @@ public class ReservationController {
 
     // 사번으로 신청 내역 조회
     @GetMapping("/{employeeNumber}")
-    public ResponseEntity<List<ReservationResponse>> getReservationsByEmployee(@PathVariable String employeeNumber) {
+    public ResponseEntity<CommonResponse<List<ReservationResponse>>> getReservationsByEmployee(@PathVariable String employeeNumber) {
         List<ReservationResponse> reservations = facadeService.getReservationsByEmployee(employeeNumber);
-        return ResponseEntity.ok(reservations);
+        return ResponseUtil.successResponse(HttpStatus.OK, "사번으로 강연 조회 성공", reservations);
     }
 
     // 신청한 강연 취소
     @DeleteMapping("/reservations/{reservationId}/employee/{employeeNumber}")
-    public ResponseEntity<Void> cancelReservation(@PathVariable Long reservationId, @PathVariable String employeeNumber) {
+    public ResponseEntity<CommonResponse<Object>> cancelReservation(@PathVariable Long reservationId, @PathVariable String employeeNumber) {
         facadeService.cancelReservation(reservationId, employeeNumber);
-        return ResponseEntity.noContent().build();
+        return ResponseUtil.successResponse(HttpStatus.OK, "실시간 강연 취소 성공", null);
     }
 
 }
