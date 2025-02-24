@@ -21,13 +21,13 @@ public class LectureRepository {
 
 
     /**
-     * 강연을 조회할 때 PESSIMISTIC_WRITE 락을 적용하여 동시성 문제를 완화합니다.
+     * 강연을 조회
      *
      * @param id 강연 ID
      * @return 락이 적용된 Lecture 엔티티, 없으면 null
      */
     public Lecture findByIdWithLock(Long id) {
-        return em.find(Lecture.class, id, LockModeType.PESSIMISTIC_WRITE);
+        return em.find(Lecture.class, id, LockModeType.NONE);
     }
 
     /**
