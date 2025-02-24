@@ -3,7 +3,6 @@ package com.lecture.front.application.service;
 import com.lecture.front.api.dto.LectureResponse;
 import com.lecture.common.domain.model.Lecture;
 import com.lecture.front.domain.repository.LectureRepository;
-import com.lecture.front.domain.repository.ReservationRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +26,6 @@ public class PopularLectureService {
 
     /**
      * 최근 3일간 신청 건수가 많은 인기 강연을 조회합니다.
-     *
-     * @return 인기 강연 응답 DTO 리스트
      */
     @Transactional
     public List<LectureResponse> getPopularLectures() {

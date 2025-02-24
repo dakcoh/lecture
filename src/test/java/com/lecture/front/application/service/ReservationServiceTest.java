@@ -68,7 +68,7 @@ public class ReservationServiceTest {
                 // 모든 스레드가 동시에 시작되도록 대기
                 startLatch.await();
                 ReservationRequest request = new ReservationRequest();
-                request.setLectureId(lecture.getId());
+                request.setLectureId(2L);
                 request.setEmployeeNumber(employeeNumber + Integer.toString(finalI) );
                 return reservationService.reserve(request);
             });

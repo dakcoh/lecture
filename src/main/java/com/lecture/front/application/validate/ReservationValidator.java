@@ -36,7 +36,7 @@ public class ReservationValidator {
      * @throws IllegalArgumentException 검증 실패 시 예외 발생
      */
     public Lecture validateReservation(ReservationRequest dto) {
-        // 1. 강연 존재 확인 및 비관적 락 적용 (동일 강연에 대한 동시 변경 방지)
+        // 1. 강연 존재 확인
         Lecture lecture = lectureRepository.findByIdWithLock(dto.getLectureId());
         if (lecture == null) {
             log.error("강연 신청 실패: 존재하지 않는 강연입니다. lectureId={}", dto.getLectureId());

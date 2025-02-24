@@ -25,21 +25,21 @@ public class ReservationController {
 
     private final FrontFacadeService facadeService;
 
-    // 강연 신청: 사번과 강연 ID를 포함하는 요청
+    // 강연 신청 API
     @PostMapping
     public ResponseEntity<CommonResponse<ReservationResponse>> reserveLecture(@RequestBody ReservationRequest dto) {
         ReservationResponse response = facadeService.reserveLecture(dto);
         return ResponseUtil.successResponse(HttpStatus.OK, "강연 신청 성공", response);
     }
 
-    // 사번으로 신청 내역 조회
+    // 사번으로 신청 내역 조회 API
     @GetMapping("/{employeeNumber}")
     public ResponseEntity<CommonResponse<List<ReservationResponse>>> getReservationsByEmployee(@PathVariable String employeeNumber) {
         List<ReservationResponse> reservations = facadeService.getReservationsByEmployee(employeeNumber);
         return ResponseUtil.successResponse(HttpStatus.OK, "사번으로 강연 조회 성공", reservations);
     }
 
-    // 신청한 강연 취소
+    // 신청한 강연 취소 API
     @DeleteMapping("/reservations/{reservationId}/employee/{employeeNumber}")
     public ResponseEntity<CommonResponse<Object>> cancelReservation(@PathVariable Long reservationId, @PathVariable String employeeNumber) {
         facadeService.cancelReservation(reservationId, employeeNumber);

@@ -23,14 +23,14 @@ public class LectureController {
 
     private final FrontFacadeService facadeService;
 
-    // 신청 가능한 강연 목록 조회
+    // 신청 가능한 강연 목록 조회 API
     @GetMapping("/available")
     public ResponseEntity<CommonResponse<List<LectureResponse>>> getAvailableLectures() {
         List<LectureResponse> lectures = facadeService.getAvailableLectures();
         return ResponseUtil.successResponse(HttpStatus.OK, "신청 가능한 강연 목록 조회 성공", lectures);
     }
 
-    // 실시간 인기 강연 조회
+    // 실시간 인기 강연 조회 API
     @GetMapping("/popular")
     public ResponseEntity<CommonResponse<List<LectureResponse>>> getPopularLectures() {
         List<LectureResponse> popularLectures = facadeService.getPopularLectures();
