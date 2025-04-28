@@ -24,4 +24,8 @@ public class ReservationResponse {
         this.status = reservation.getStatus();
         this.createdAt = reservation.getCreatedAt();
     }
+
+    public static ReservationResponse toResponse(Reservation reservation) {
+        return new ReservationResponse(reservation);
+    }
 }
