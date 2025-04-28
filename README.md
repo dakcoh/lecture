@@ -1,23 +1,10 @@
 # lecture
-## 1. 개발 언어
+## 1. DevTools
 ### Java 21
+### Gradle
+### MySQL 8.0.41
 
-## 2. 프레임워크
-### Spring Boot 3.4.2
-### Spring Boot Starter Data JPA
-### Spring Boot Starter Validation
-### Spring Boot Starter Web
-### Spring Boot Starter Test
-### Lombok
-### MySQL Connector/J
-### Spring Retry
-### Spring Aspects
-- Gradle을 빌드 도구로 사용했습니다.
-
-## 3. RDBMS
-### MySQL 8.0.4 1
-- 익숙하며, 최신 기능과 안정된 성능, Spring Boot와의 호환성 때문에 MySQL 8.0.4를 선택했습니다.
-## 데이터 설계
+## 2. 데이터 설계
 
 ```mysql
 -- lectures 테이블: 강연 정보 저장
@@ -97,7 +84,7 @@ DATETIME updated_at "수정일시"
     LECTURES ||--o{ RESERVATIONS : "lecture_id:id"
 ```
 
-## 4. 고민했던 부분에 대한 설명
+## 3. 고민했던 부분에 대한 설명
 ### 프로젝트 패턴 구조
 단일 프로젝트 내에서 front와 backoffice를 한 번에 생성하였으며, 동일한 entity를 `common 패키지`로 관리하여 패키지 관리의 복잡도를 줄였습니다. <br>
 backoffice에는 CRUD가 명확한 특성을 고려하여 `트랜잭션 스크립트 패턴`을 적용하였으며, 이를 통해 트랜잭션 관리가 용이해졌습니다. <br>
