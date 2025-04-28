@@ -4,25 +4,25 @@ import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.common.domain.model.Lecture;
 import com.lecture.front.domain.repository.LectureRepository;
 import com.lecture.front.domain.repository.ReservationRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 강연 예약 요청에 대한 유효성 검증 로직을 분리한 Validator 클래스
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class ReservationValidator {
-
-    @Qualifier("frontLectureRepository")
     private final LectureRepository lectureRepository;
-    @Qualifier("frontReservationRepository")
     private final ReservationRepository reservationRepository;
+
+    public ReservationValidator(
+            @Qualifier("frontLectureRepository") LectureRepository lectureRepository,
+            @Qualifier("frontReservationRepository") ReservationRepository reservationRepository) {
+        this.lectureRepository = lectureRepository;
+        this.reservationRepository = reservationRepository;
+    }
 
     /**
      * 예약 요청에 대해 다음을 검증합니다.
@@ -36,26 +36,34 @@ public class ReservationValidator {
      * @throws IllegalArgumentException 검증 실패 시 예외 발생
      */
     public Lecture validateReservation(ReservationRequest dto) {
-        // 1. 강연 존재 확인
-        Lecture lecture = lectureRepository.findByIdWithLock(dto.getLectureId());
+        Lecture lecture = validateLectureExistence(dto.getLectureId());
+        validateDuplicateReservation(dto.getLectureId(), dto.getEmployeeNumber());
+        validateCapacity(lecture, dto.getLectureId());
+
+        return lecture;
+    }
+
+    private Lecture validateLectureExistence(Long lectureId) {
+        Lecture lecture = lectureRepository.findByIdWithLock(lectureId);
         if (lecture == null) {
-            log.error("강연 신청 실패: 존재하지 않는 강연입니다. lectureId={}", dto.getLectureId());
+            log.error("강연 신청 실패: 존재하지 않는 강연입니다. lectureId={}", lectureId);
             throw new IllegalArgumentException("존재하지 않는 강연입니다.");
         }
+        return lecture;
+    }
 
-        // 2. 활성 예약 중복 확인
-        if (reservationRepository.existsActiveReservationByLectureIdAndEmployeeNumber(dto.getLectureId(), dto.getEmployeeNumber())) {
-            log.error("예약 실패: 이미 활성 예약이 존재합니다. lectureId={}, employeeNumber={}", dto.getLectureId(), dto.getEmployeeNumber());
+    private void validateDuplicateReservation(Long lectureId, String employeeNumber) {
+        if (reservationRepository.existsActiveReservationByLectureIdAndEmployeeNumber(lectureId, employeeNumber)) {
+            log.error("예약 실패: 이미 활성 예약이 존재합니다. lectureId={}, employeeNumber={}", lectureId, employeeNumber);
             throw new IllegalArgumentException("이미 신청한 강연입니다.");
         }
+    }
 
-        // 3. 강연 정원 초과 검증
-        long currentReservations = reservationRepository.countByLectureId(dto.getLectureId());
+    private void validateCapacity(Lecture lecture, Long lectureId) {
+        long currentReservations = reservationRepository.countByLectureId(lectureId);
         if (currentReservations >= lecture.getCapacity()) {
-            log.error("예약 실패: 강연 정원 초과. lectureId={}, 현재예약수={}, 정원={}",
-                    dto.getLectureId(), currentReservations, lecture.getCapacity());
+            log.error("예약 실패: 강연 정원 초과. lectureId={}, 현재예약수={}, 정원={}", lectureId, currentReservations, lecture.getCapacity());
             throw new IllegalArgumentException("강연 정원이 초과되었습니다.");
         }
-        return lecture;
     }
 }
