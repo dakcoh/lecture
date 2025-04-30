@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Lecture 엔티티의 CRUD 작업을 위한 Repository
  */
-@Repository("backofficeLectureRepository")
-public class LectureRepository {
+@Repository
+public class backOfficeLectureRepository {
 
     @PersistenceContext
     private EntityManager em;

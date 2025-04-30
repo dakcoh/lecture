@@ -14,13 +14,12 @@ import java.util.List;
 /**
  * 강연 관련 API 엔드포인트
  */
-@RestController("backofficeLectureController")
 @RequestMapping("/api/backoffice/lectures")
-public class LectureController {
+public class backOfficeLectureController {
 
     private final LectureService lectureService;
 
-    public LectureController(LectureService lectureService) {
+    public backOfficeLectureController(LectureService lectureService) {
         this.lectureService = lectureService;
     }
 

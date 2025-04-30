@@ -19,7 +19,7 @@ public class LectureValidator {
      * @param startTime 강연 시작 시간
      * @param endTime   강연 종료 시간
      */
-    public void validateTimeRange(LocalDateTime startTime, LocalDateTime endTime) {
+    public static void validateTimeRange(LocalDateTime startTime, LocalDateTime endTime) {
         if(startTime == null || endTime == null || !endTime.isAfter(startTime)) {
             log.error("강연 등록 실패: 잘못된 시간 입력, startTime={}, endTime={}", startTime, endTime);
             throw new IllegalArgumentException("잘못된 시간 입력: 종료 시간은 시작 시간보다 늦어야 합니다.");

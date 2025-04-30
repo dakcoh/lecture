@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * Reservation 엔티티의 CRUD 및 커스텀 쿼리 작업을 위한 Repository
  */
-@Repository("backofficeReservationRepository")
-public class ReservationRepository {
+@Repository
+public class backOfficeReservationRepository {
 
     @PersistenceContext
     private EntityManager em;
