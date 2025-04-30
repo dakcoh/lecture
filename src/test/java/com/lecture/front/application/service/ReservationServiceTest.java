@@ -3,8 +3,8 @@ package com.lecture.front.application.service;
 import com.lecture.common.domain.model.Lecture;
 import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.front.api.dto.ReservationResponse;
-import com.lecture.backoffice.domain.repository.LectureRepository;
-import com.lecture.front.domain.repository.ReservationRepository;
+import com.lecture.backoffice.domain.repository.backOfficeLectureRepository;
+import com.lecture.front.domain.repository.frontReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +28,10 @@ public class ReservationServiceTest {
     private ReservationService reservationService;
 
     @Autowired
-    private LectureRepository lectureRepository;
+    private backOfficeLectureRepository lectureRepository;
 
     @Autowired
-    private ReservationRepository reservationRepository;
+    private frontReservationRepository reservationRepository;
 
     private Lecture lecture;
     private final String employeeNumber = "1234";
@@ -69,7 +69,7 @@ public class ReservationServiceTest {
                 startLatch.await();
                 ReservationRequest request = new ReservationRequest();
                 request.setLectureId(2L);
-                request.setEmployeeNumber(employeeNumber + Integer.toString(finalI) );
+                request.setEmployeeNumber(employeeNumber + finalI);
                 return reservationService.reserve(request);
             });
             futures.add(future);

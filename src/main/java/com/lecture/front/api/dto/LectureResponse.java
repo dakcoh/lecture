@@ -32,4 +32,9 @@ public class LectureResponse {
         this(lecture);
         this.reservationCount = reservationCount;
     }
+
+    // 헬퍼 메서드: Object[] -> LectureResponse 변환
+    public static LectureResponse mapToLectureResponse(Object[] result) {
+        return new LectureResponse((Lecture) result[0], (Long) result[1]);
+    }
 }

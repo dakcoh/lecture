@@ -8,28 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("frontReservationRepository")
-public class ReservationRepository {
+@Repository
+public class frontReservationRepository {
 
     @PersistenceContext
     private EntityManager em;
-
-    /**
-     * 강연 ID와 사번을 기준으로 취소된(CANCELED) 예약을 조회합니다.
-     * @param lectureId 강연 ID
-     * @param employeeNumber 사번
-     * @return 조건에 맞는 취소된 Reservation 엔티티, 없으면 null
-     */
-    public Reservation findCanceledReservationByLectureIdAndEmployeeNumber(Long lectureId, String employeeNumber) {
-        List<Reservation> results = em.createQuery(
-                        "select r from Reservation r where r.lecture.id = :lectureId and r.employeeNumber = :employeeNumber and r.status = :status",
-                        Reservation.class)
-                .setParameter("lectureId", lectureId)
-                .setParameter("employeeNumber", employeeNumber)
-                .setParameter("status", ReservationStatus.CANCELED)
-                .getResultList();
-        return results.isEmpty() ? null : results.getFirst();
-    }
 
     public int upsertReservation(Long lectureId, String employeeNumber) {
         String sql = "INSERT INTO reservations (lecture_id, employee_number, status, created_at, updated_at) " +
@@ -43,21 +26,6 @@ public class ReservationRepository {
                 .executeUpdate();
     }
 
-    /**
-     * 강연 ID와 사번에 대해 예약 상태가 CONFIRMED인 예약을 CANCELED로 업데이트합니다.
-     * 업데이트된 행 수가 1이면 성공, 0이면 활성 예약이 없다는 의미입니다.
-     */
-    public int cancelReservation(Long lectureId, String employeeNumber) {
-        String sql = "UPDATE reservations " +
-                "SET status = 'CANCELED', updated_at = NOW() " +
-                "WHERE lecture_id = :lectureId " +
-                "  AND employee_number = :employeeNumber " +
-                "  AND status = 'CONFIRMED'";
-        return em.createNativeQuery(sql)
-                .setParameter("lectureId", lectureId)
-                .setParameter("employeeNumber", employeeNumber)
-                .executeUpdate();
-    }
     /**
      * 사번으로 예약 목록 조회
      * @param employeeNumber 예약된 사번

@@ -34,4 +34,10 @@ public class Reservation extends BaseEntity {
     // 예약 상태
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+
+
+    public void cancel() {
+        this.status = ReservationStatus.CANCELED;
+        onUpdate();
+    }
 }
