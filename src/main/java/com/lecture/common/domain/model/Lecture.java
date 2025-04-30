@@ -1,5 +1,6 @@
 package com.lecture.common.domain.model;
 
+import com.lecture.backoffice.api.dto.LectureRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,4 +37,15 @@ public class Lecture extends BaseEntity {
     // 강연 내용 (최대 1000자)
     @Column(length = 1000)
     private String description;
+
+    public static Lecture toLecture(LectureRequest dto) {
+        return Lecture.builder()
+                .lecturer(dto.getLecturer())
+                .venue(dto.getVenue())
+                .capacity(dto.getCapacity())
+                .startTime(dto.getStartTime())
+                .endTime(dto.getEndTime())
+                .description(dto.getDescription())
+                .build();
+    }
 }

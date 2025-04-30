@@ -28,4 +28,8 @@ public class LectureResponse {
         this.endTime = lecture.getEndTime();
         this.description = lecture.getDescription();
     }
+
+    public static LectureResponse toResponse(Lecture lecture) {
+        return new LectureResponse(lecture);
+    }
 }

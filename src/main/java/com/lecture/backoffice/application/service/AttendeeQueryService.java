@@ -1,8 +1,7 @@
 package com.lecture.backoffice.application.service;
 
-import com.lecture.backoffice.domain.repository.ReservationRepository;
+import com.lecture.backoffice.domain.repository.backOfficeReservationRepository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,16 +11,14 @@ import java.util.List;
  */
 @Service
 public class AttendeeQueryService {
+    private final backOfficeReservationRepository backOfficeReservationRepository;
 
-    @Qualifier("backofficeReservationRepository")
-    private final ReservationRepository reservationRepository;
-
-    public AttendeeQueryService(ReservationRepository reservationRepository) {
-        this.reservationRepository = reservationRepository;
+    public AttendeeQueryService(backOfficeReservationRepository backOfficeReservationRepository) {
+        this.backOfficeReservationRepository = backOfficeReservationRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<String> getAttendeesByLectureId(Long lectureId) {
-        return reservationRepository.findEmployeeNumbersByLectureId(lectureId);
+        return backOfficeReservationRepository.findEmployeeNumbersByLectureId(lectureId);
     }
 }
