@@ -13,8 +13,8 @@ import java.util.List;
  * Lecture 엔티티의 CRUD 작업을 수행하는 Repository.
  * 공통 도메인 Lecture 엔티티를 사용하므로, JPQL 쿼리에서 엔티티 이름은 "Lecture"를 사용합니다.
  */
-@Repository("frontLectureRepository")
-public class LectureRepository {
+@Repository
+public class frontLectureRepository {
 
     @PersistenceContext
     private EntityManager em;

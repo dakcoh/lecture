@@ -1,41 +1,27 @@
 package com.lecture.front.application.service;
 
-import com.lecture.backoffice.domain.repository.LectureAvailabilityRepository;
 import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.front.api.dto.ReservationResponse;
+import com.lecture.front.application.service.reservation.ReservationCancel;
+import com.lecture.front.application.service.reservation.ReservationProcessor;
 import com.lecture.front.application.validate.ReservationValidator;
 import com.lecture.common.domain.model.Lecture;
 import com.lecture.common.domain.model.Reservation;
-import com.lecture.front.domain.repository.ReservationRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.lecture.front.api.dto.ReservationResponse.toResponse;
 
 /**
  * 강연 예약 서비스에서는 단일 서버 환경에서 데이터 일관성을 확보하기 위해 다음과 같이 구현했습니다.
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ReservationService {
-    private final ReservationRepository reservationRepository;
     private final ReservationValidator reservationValidator;
-    private final LectureAvailabilityRepository lectureAvailabilityRepository;
-
-    public ReservationService(
-            @Qualifier("frontReservationRepository") ReservationRepository reservationRepository,
-            ReservationValidator reservationValidator,
-            LectureAvailabilityRepository lectureAvailabilityRepository
-    ) {
-        this.reservationRepository = reservationRepository;
-        this.reservationValidator = reservationValidator;
-        this.lectureAvailabilityRepository = lectureAvailabilityRepository;
-    }
+    private final ReservationProcessor reservationProcessor;
+    private final ReservationCancel reservationCancel;
 
     /**
      * 강연 예약 처리
@@ -46,60 +32,27 @@ public class ReservationService {
     public ReservationResponse reserve(ReservationRequest dto) {
         log.info("예약 요청: {}", dto);
 
-        // 1. 유효성 검증
         Lecture lecture = reservationValidator.validateReservation(dto);
 
-        // 2. 좌석 감소 원자적 업데이트
-        int updatedRows = lectureAvailabilityRepository.decrementAvailableSeats(lecture.getId());
-        if (updatedRows == 0) {
-            log.error("예약 실패: 좌석이 부족합니다. lectureId={}, employeeNumber={}",
-                    lecture.getId(), dto.getEmployeeNumber());
-            throw new IllegalArgumentException("예약 실패: 좌석이 부족합니다.");
-        }
-
-        // 3. 별도 트랜잭션에서 예약 생성/재활성화 처리
-        Reservation reservation = upsertReservation(lecture, dto.getEmployeeNumber());
+        Reservation reservation = reservationProcessor.process(lecture, dto.getEmployeeNumber());
         log.info("예약 처리 성공: reservationId={}", reservation.getId());
-        return toResponse(reservation);
-    }
 
-    /**
-     * 별도의 트랜잭션(REQUIRES_NEW)에서 예약을 생성하거나 재활성화
-     */
-    @Retryable(
-            backoff = @Backoff(delay = 100)
-    )
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Reservation upsertReservation(Lecture lecture, String employeeNumber) {
-        // 조건부 upsert를 native query 등으로 한 번에 처리 (INSERT ... ON DUPLICATE KEY UPDATE)
-        int affectedRows = reservationRepository.upsertReservation(lecture.getId(), employeeNumber);
-        if (affectedRows > 0) {
-            // 예약이 성공적으로 생성 또는 재활성화되었으므로, 활성 예약 정보를 조회하여 반환합니다.
-            return reservationRepository.findActiveReservationByLectureIdAndEmployeeNumber(lecture.getId(), employeeNumber);
-        }
-        throw new IllegalStateException("예약 처리 중 알 수 없는 오류가 발생했습니다.");
+        return ReservationResponse.toResponse(reservation);
     }
 
     /**
      * 사번으로 신청 내역 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public java.util.List<ReservationResponse> getReservationsByEmployee(String employeeNumber) {
-        return reservationRepository.findActiveReservationsByEmployeeNumber(employeeNumber).stream()
+        return reservationProcessor.getActiveReservations(employeeNumber).stream()
                 .map(ReservationResponse::toResponse)
                 .toList();
     }
 
     @Transactional
-    public void cancelReservation(Long lectureId, String employeeNumber) {
-        // 1. 취소 업데이트: 조건부 UPDATE로 활성 예약 상태인 경우에만 CANCELED로 변경
-        int updated = reservationRepository.cancelReservation(lectureId, employeeNumber);
-        if (updated == 0) {
-            log.error("예약 취소 실패: 해당 강연에 대한 활성 예약이 존재하지 않습니다. lectureId={}, employeeNumber={}", lectureId, employeeNumber);
-            throw new IllegalArgumentException("예약이 존재하지 않습니다.");
-        }
-        log.info("예약 취소 성공: lectureId={}, employeeNumber={}", lectureId, employeeNumber);
-
-        lectureAvailabilityRepository.incrementAvailableSeats(lectureId);
+    public ReservationResponse cancelReservation(Long lectureId, String employeeNumber) {
+        Reservation reservation = reservationCancel.cancel(lectureId, employeeNumber);
+        return ReservationResponse.toResponse(reservation);
     }
 }

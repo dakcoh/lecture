@@ -2,10 +2,9 @@ package com.lecture.front.application.validate;
 
 import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.common.domain.model.Lecture;
-import com.lecture.front.domain.repository.LectureRepository;
-import com.lecture.front.domain.repository.ReservationRepository;
+import com.lecture.front.domain.repository.frontLectureRepository;
+import com.lecture.front.domain.repository.frontReservationRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,12 +13,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class ReservationValidator {
-    private final LectureRepository lectureRepository;
-    private final ReservationRepository reservationRepository;
+    private final frontLectureRepository lectureRepository;
+    private final frontReservationRepository reservationRepository;
 
     public ReservationValidator(
-            @Qualifier("frontLectureRepository") LectureRepository lectureRepository,
-            @Qualifier("frontReservationRepository") ReservationRepository reservationRepository) {
+            frontLectureRepository lectureRepository,
+            frontReservationRepository reservationRepository) {
         this.lectureRepository = lectureRepository;
         this.reservationRepository = reservationRepository;
     }

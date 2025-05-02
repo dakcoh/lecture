@@ -1,12 +1,10 @@
 package com.lecture.front.application.service;
 
 import com.lecture.front.api.dto.LectureResponse;
-import com.lecture.common.domain.model.Lecture;
-import com.lecture.front.domain.repository.LectureRepository;
+import com.lecture.front.domain.repository.frontLectureRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,14 +18,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PopularLectureService {
-
-    @Qualifier("frontLectureRepository")
-    private final LectureRepository lectureRepository;
+    private final frontLectureRepository lectureRepository;
 
     /**
      * 최근 3일간 신청 건수가 많은 인기 강연을 조회합니다.
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<LectureResponse> getPopularLectures() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threeDaysAgo = now.minusDays(3);
@@ -37,15 +33,10 @@ public class PopularLectureService {
 
         // 인기 강연 조회
         List<LectureResponse> popularLectures = results.stream()
-                .map(this::mapToLectureResponse)
+                .map(LectureResponse::mapToLectureResponse)
                 .collect(Collectors.toList());
         log.info("인기 강연 조회: {}건", popularLectures.size());
 
         return popularLectures;
-    }
-
-    // 헬퍼 메서드: Object[] -> LectureResponse 변환
-    private LectureResponse mapToLectureResponse(Object[] result) {
-        return new LectureResponse((Lecture) result[0], (Long) result[1]);
     }
 }

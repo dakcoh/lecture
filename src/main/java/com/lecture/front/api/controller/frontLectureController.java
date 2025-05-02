@@ -16,10 +16,10 @@ import java.util.List;
  * - 신청 가능한 강연 목록 조회 (강연 시작 1주일 전 ~ 1일 후)
  * - 실시간 인기 강연 조회 (최근 3일간 신청 건수 기준)
  */
-@RestController("frontLectureController")
+@RestController
 @RequestMapping("/api/front/lectures")
 @RequiredArgsConstructor
-public class LectureController {
+public class frontLectureController {
 
     private final FrontFacadeService facadeService;
 

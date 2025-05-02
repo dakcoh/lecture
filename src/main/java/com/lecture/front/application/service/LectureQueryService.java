@@ -1,10 +1,9 @@
 package com.lecture.front.application.service;
 
 import com.lecture.front.api.dto.LectureResponse;
-import com.lecture.front.domain.repository.LectureRepository;
+import com.lecture.front.domain.repository.frontLectureRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,10 +17,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class LectureQueryService {
 
-    @Qualifier("frontLectureRepository")
-    private final LectureRepository lectureRepository;
+    private final frontLectureRepository lectureRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<LectureResponse> getAvailableLectures() {
         LocalDateTime now = LocalDateTime.now();
         // 신청 가능한 기간: 강연 시작 1주일 전부터 강연 시작 1일 후까지
