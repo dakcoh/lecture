@@ -22,13 +22,10 @@ public class LectureQueryService {
     @Transactional(readOnly = true)
     public List<LectureResponse> getAvailableLectures() {
         LocalDateTime now = LocalDateTime.now();
-        // 신청 가능한 기간: 강연 시작 1주일 전부터 강연 시작 1일 후까지
-        return lectureRepository.findAll().stream()
-                .filter(lecture -> {
-                    LocalDateTime availableFrom = lecture.getStartTime().minusWeeks(1);
-                    LocalDateTime availableUntil = lecture.getStartTime().plusDays(1);
-                    return now.isAfter(availableFrom) && now.isBefore(availableUntil);
-                })
+        LocalDateTime from = now.minusWeeks(1);
+        LocalDateTime to = now.plusDays(1);
+
+        return lectureRepository.findByStartTimeBetween(from, to).stream()
                 .map(LectureResponse::new)
                 .collect(Collectors.toList());
     }

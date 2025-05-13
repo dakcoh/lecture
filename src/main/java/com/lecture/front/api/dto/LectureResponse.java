@@ -1,11 +1,13 @@
 package com.lecture.front.api.dto;
 
 import com.lecture.common.domain.model.Lecture;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 public class LectureResponse {
     private final Long id;
     private final String lecturer;

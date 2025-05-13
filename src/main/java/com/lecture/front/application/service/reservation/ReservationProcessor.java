@@ -3,9 +3,11 @@ package com.lecture.front.application.service.reservation;
 import com.lecture.backoffice.domain.repository.LectureAvailabilityRepository;
 import com.lecture.common.domain.model.Lecture;
 import com.lecture.common.domain.model.Reservation;
-import com.lecture.front.domain.repository.frontReservationRepository;
+import com.lecture.common.domain.model.ReservationStatus;
+import com.lecture.front.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ReservationProcessor {
-
-    private final frontReservationRepository reservationRepository;
+    @Autowired
+    private final ReservationRepository reservationRepository;
     private final LectureAvailabilityRepository lectureAvailabilityRepository;
 
     public Reservation process(Lecture lecture, String employeeNumber) {
@@ -31,18 +33,25 @@ public class ReservationProcessor {
         return upsertReservation(lecture, employeeNumber);
     }
 
+
     @Retryable(backoff = @Backoff(delay = 100))
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Reservation upsertReservation(Lecture lecture, String employeeNumber) {
-        int affectedRows = reservationRepository.upsertReservation(lecture.getId(), employeeNumber);
-        if (affectedRows > 0) {
-            return reservationRepository.findActiveReservationByLectureIdAndEmployeeNumber(lecture.getId(), employeeNumber);
-        }
-        throw new IllegalStateException("예약 처리 중 오류 발생");
+        Reservation reservation = Reservation.builder()
+                .id(lecture.getId())
+                .employeeNumber(employeeNumber)
+                .status(ReservationStatus.CONFIRMED)
+                .build();
+
+        Reservation savereservation = reservationRepository.save(reservation);
+
+        log.info("예약 등록 성공: id={}", savereservation);
+
+        return savereservation;
     }
 
     @Transactional(readOnly = true)
     public List<Reservation> getActiveReservations(String employeeNumber) {
-        return reservationRepository.findActiveReservationsByEmployeeNumber(employeeNumber);
+        return reservationRepository.findByEmployeeNumberAndStatus(employeeNumber, ReservationStatus.CONFIRMED);
     }
 }

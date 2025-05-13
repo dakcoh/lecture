@@ -4,7 +4,7 @@ import com.lecture.common.domain.model.Lecture;
 import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.front.api.dto.ReservationResponse;
 import com.lecture.backoffice.domain.repository.backOfficeLectureRepository;
-import com.lecture.front.domain.repository.frontReservationRepository;
+import com.lecture.front.domain.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ReservationServiceTest {
     private backOfficeLectureRepository lectureRepository;
 
     @Autowired
-    private frontReservationRepository reservationRepository;
+    private ReservationRepository reservationRepository;
 
     private Lecture lecture;
     private final String employeeNumber = "1234";

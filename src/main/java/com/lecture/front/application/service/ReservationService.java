@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 강연 예약 서비스에서는 단일 서버 환경에서 데이터 일관성을 확보하기 위해 다음과 같이 구현했습니다.
  */
@@ -44,11 +46,12 @@ public class ReservationService {
      * 사번으로 신청 내역 조회
      */
     @Transactional(readOnly = true)
-    public java.util.List<ReservationResponse> getReservationsByEmployee(String employeeNumber) {
+    public List<ReservationResponse> getReservationsByEmployee(String employeeNumber) {
         return reservationProcessor.getActiveReservations(employeeNumber).stream()
                 .map(ReservationResponse::toResponse)
                 .toList();
     }
+
 
     @Transactional
     public ReservationResponse cancelReservation(Long lectureId, String employeeNumber) {
