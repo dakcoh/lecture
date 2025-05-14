@@ -4,6 +4,7 @@ import com.lecture.common.domain.model.Lecture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -14,11 +15,10 @@ import java.util.List;
  * 공통 도메인 Lecture 엔티티를 사용하므로, JPQL 쿼리에서 엔티티 이름은 "Lecture"를 사용합니다.
  */
 @Repository
-public class frontLectureRepository {
+public class FrontLectureQueryRepository {
 
     @PersistenceContext
     private EntityManager em;
-
 
     /**
      * 강연을 조회
@@ -28,17 +28,6 @@ public class frontLectureRepository {
      */
     public Lecture findByIdWithLock(Long id) {
         return em.find(Lecture.class, id, LockModeType.NONE);
-    }
-
-    /**
-     * 모든 강연을 조회합니다.
-     * 공통 도메인 Lecture 엔티티를 사용하므로 JPQL 쿼리에서 엔티티 이름은 "Lecture"를 사용합니다.
-     *
-     * @return Lecture 엔티티 리스트
-     */
-    public List<Lecture> findAll() {
-        return em.createQuery("select l from Lecture l", Lecture.class)
-                .getResultList();
     }
 
     /**

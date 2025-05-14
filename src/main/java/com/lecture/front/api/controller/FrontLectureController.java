@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/front/lectures")
 @RequiredArgsConstructor
-public class frontLectureController {
+public class FrontLectureController {
 
     private final FrontFacadeService facadeService;
 
