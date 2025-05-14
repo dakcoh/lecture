@@ -52,7 +52,6 @@ public class ReservationService {
                 .toList();
     }
 
-
     @Transactional
     public ReservationResponse cancelReservation(Long lectureId, String employeeNumber) {
         Reservation reservation = reservationCancel.cancel(lectureId, employeeNumber);

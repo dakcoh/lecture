@@ -1,6 +1,6 @@
 package com.lecture.front.application.service.reservation;
 
-import com.lecture.backoffice.domain.repository.LectureAvailabilityRepository;
+import com.lecture.front.domain.repository.FrontLectureAvailabilityRepository;
 import com.lecture.common.domain.model.Reservation;
 import com.lecture.common.domain.model.ReservationStatus;
 import com.lecture.front.domain.repository.ReservationRepository;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ReservationCancel {
     private final ReservationRepository reservationRepository;
-    private final LectureAvailabilityRepository lectureAvailabilityRepository;
+    private final FrontLectureAvailabilityRepository lectureAvailabilityRepository;
 
     public Reservation cancel(Long lectureId, String employeeNumber) {
         Reservation reservation = reservationRepository

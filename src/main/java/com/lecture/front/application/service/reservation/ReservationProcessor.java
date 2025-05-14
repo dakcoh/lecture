@@ -1,6 +1,6 @@
 package com.lecture.front.application.service.reservation;
 
-import com.lecture.backoffice.domain.repository.LectureAvailabilityRepository;
+import com.lecture.front.domain.repository.FrontLectureAvailabilityRepository;
 import com.lecture.common.domain.model.Lecture;
 import com.lecture.common.domain.model.Reservation;
 import com.lecture.common.domain.model.ReservationStatus;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ReservationProcessor {
     @Autowired
     private final ReservationRepository reservationRepository;
-    private final LectureAvailabilityRepository lectureAvailabilityRepository;
+    private final FrontLectureAvailabilityRepository lectureAvailabilityRepository;
 
     public Reservation process(Lecture lecture, String employeeNumber) {
         int updatedRows = lectureAvailabilityRepository.decrementAvailableSeats(lecture.getId());

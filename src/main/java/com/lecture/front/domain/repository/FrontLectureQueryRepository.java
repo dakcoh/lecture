@@ -4,6 +4,7 @@ import com.lecture.common.domain.model.Lecture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.util.List;
  * 공통 도메인 Lecture 엔티티를 사용하므로, JPQL 쿼리에서 엔티티 이름은 "Lecture"를 사용합니다.
  */
 @Repository
-public class frontLectureQueryRepository {
+public class FrontLectureQueryRepository {
 
     @PersistenceContext
     private EntityManager em;

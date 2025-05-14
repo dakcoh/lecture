@@ -1,7 +1,7 @@
 package com.lecture.front.application.service;
 
 import com.lecture.front.api.dto.LectureResponse;
-import com.lecture.front.domain.repository.frontLectureQueryRepository;
+import com.lecture.front.domain.repository.FrontLectureQueryRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PopularLectureService {
-    private final frontLectureQueryRepository lectureRepository;
+    private final FrontLectureQueryRepository lectureRepository;
 
     /**
      * 최근 3일간 신청 건수가 많은 인기 강연을 조회합니다.

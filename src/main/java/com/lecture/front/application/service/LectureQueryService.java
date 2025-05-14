@@ -1,7 +1,7 @@
 package com.lecture.front.application.service;
 
 import com.lecture.front.api.dto.LectureResponse;
-import com.lecture.front.domain.repository.frontLectureRepository;
+import com.lecture.front.domain.repository.FrontLectureRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LectureQueryService {
-
-    private final frontLectureRepository lectureRepository;
+    private final FrontLectureRepository lectureRepository;
 
     @Transactional(readOnly = true)
     public List<LectureResponse> getAvailableLectures() {
@@ -26,7 +25,7 @@ public class LectureQueryService {
         LocalDateTime to = now.plusDays(1);
 
         return lectureRepository.findByStartTimeBetween(from, to).stream()
-                .map(LectureResponse::new)
+                .map(LectureResponse::toResponse)
                 .collect(Collectors.toList());
     }
 }

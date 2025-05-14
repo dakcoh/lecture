@@ -59,6 +59,7 @@ public class FrontFacadeService {
      * 예약 취소 처리
      *
      * @param reservationId 예약 ID
+     * @param employeeNumber 사번
      */
     public void cancelReservation(Long reservationId, String employeeNumber) {
         reservationService.cancelReservation(reservationId, employeeNumber);

@@ -4,7 +4,7 @@ import com.lecture.common.domain.model.ReservationStatus;
 import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.common.domain.model.Lecture;
 import com.lecture.front.domain.repository.ReservationRepository;
-import com.lecture.front.domain.repository.frontLectureQueryRepository;
+import com.lecture.front.domain.repository.FrontLectureQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ReservationValidator {
-    private final frontLectureQueryRepository lectureRepository;
+    private final FrontLectureQueryRepository lectureRepository;
     private final ReservationRepository reservationRepository;
 
     /**
@@ -25,10 +25,6 @@ public class ReservationValidator {
      * 2. 같은 강연에 대해 중복 예약이 없는지
      * 3. 강연 정원이 초과되지 않았는지
      * 4. 같은 사번으로 이미 예약된 강연 중, 시간 겹침이 없는지
-     *
-     * @param dto 예약 요청 DTO
-     * @return 유효한 Lecture 엔티티 (예약하려는 강연)
-     * @throws IllegalArgumentException 검증 실패 시 예외 발생
      */
     public Lecture validateReservation(ReservationRequest dto) {
         Lecture lecture = validateLectureExistence(dto.getLectureId());
