@@ -3,8 +3,8 @@ package com.lecture.front.application.validate;
 import com.lecture.common.domain.model.ReservationStatus;
 import com.lecture.front.api.dto.ReservationRequest;
 import com.lecture.common.domain.model.Lecture;
+import com.lecture.front.domain.repository.FrontLectureRepository;
 import com.lecture.front.domain.repository.ReservationRepository;
-import com.lecture.front.domain.repository.FrontLectureQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ReservationValidator {
-    private final FrontLectureQueryRepository lectureRepository;
+    private final FrontLectureRepository lectureRepository;
     private final ReservationRepository reservationRepository;
 
     /**
