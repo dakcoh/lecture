@@ -1,12 +1,8 @@
 package com.lecture.front.domain.repository;
 
-import com.lecture.common.domain.model.Lecture;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,16 +15,6 @@ public class FrontLectureQueryRepository {
 
     @PersistenceContext
     private EntityManager em;
-
-    /**
-     * 강연을 조회
-     *
-     * @param id 강연 ID
-     * @return 락이 적용된 Lecture 엔티티, 없으면 null
-     */
-    public Lecture findByIdWithLock(Long id) {
-        return em.find(Lecture.class, id, LockModeType.NONE);
-    }
 
     /**
      * 지난 3일간의 예약 건수를 기준으로 강연을 조회합니다.

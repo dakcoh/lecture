@@ -1,7 +1,11 @@
 package com.lecture.front.domain.repository;
 
 import com.lecture.common.domain.model.Lecture;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -14,4 +18,8 @@ import java.util.List;
 @Repository
 public interface FrontLectureRepository extends JpaRepository<Lecture, Long> {
     List<Lecture> findByStartTimeBetween(LocalDateTime from, LocalDateTime to);
+
+    @Lock(LockModeType.NONE)
+    @Query("select l from Lecture l where l.id = :id")
+    Lecture findByIdWithLock(@Param("id") Long id);
 }

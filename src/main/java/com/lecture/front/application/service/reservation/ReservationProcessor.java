@@ -7,7 +7,6 @@ import com.lecture.common.domain.model.ReservationStatus;
 import com.lecture.front.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -20,10 +19,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ReservationProcessor {
-    @Autowired
     private final ReservationRepository reservationRepository;
     private final FrontLectureAvailabilityRepository lectureAvailabilityRepository;
 
+    @Transactional
     public Reservation process(Lecture lecture, String employeeNumber) {
         int updatedRows = lectureAvailabilityRepository.decrementAvailableSeats(lecture.getId());
         if (updatedRows == 0) {
